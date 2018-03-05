@@ -2,22 +2,27 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import web3 from './web3';
+import lottery from './lottery';
 
 class App extends Component {
-  componentDidMount() {
-    web3.eth.getAccounts()
-      .then(console.log)
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      manager: '',
+    };
+  }
+  async componentDidMount() {
+    // no need to specify from propery since metamask defaults it to accounts[0]
+    const manager = await lottery.methods.manager().call();
+    this.setState({ manager });
   }
   render() {
+    const { manager } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <h2>Lottery Contract</h2>
+        <p>This contract is managed by {manager}</p>
       </div>
     );
   }
